@@ -77,7 +77,7 @@ public class Program extends JFrame {
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.anchor = GridBagConstraints.WEST;
-        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.insets = new Insets(10, 10, 10, 10);
 
         // Aba Decoração
         JPanel panelDecoracao = new JPanel();
@@ -213,7 +213,8 @@ public class Program extends JFrame {
         panelSom.add(new JLabel("Valor do Som:"), gbcSom);
         gbcSom.gridx++;
         panelSom.add(new JTextField(10), gbcSom);
-
+        
+        tabbedPaneGastos.addTab("Som", panelSom);
         panelGastos.add(panelSom, gbc);
 
         // Aba Espaço
@@ -247,6 +248,7 @@ public class Program extends JFrame {
         gbcEspaco.gridx++;
         panelEspaco.add(new JTextField(10), gbcEspaco);
 
+        tabbedPaneGastos.addTab("Espaço", panelEspaco);
         panelGastos.add(panelEspaco, gbc);
 
         // Aba Equipamento
