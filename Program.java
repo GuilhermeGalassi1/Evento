@@ -1,384 +1,287 @@
+
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class Program extends JFrame {
-    private JTextField[] numIngressosFields;
-    private JButton buttonCalcular;
-    private JTextArea textAreaObservacoes;
-
     public Program() {
-        super("Calculadora de Eventos");
+        setTitle("Calculadora de Eventos");
+        setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setPreferredSize(new Dimension(800, 600));
 
-        JPanel panelForm = new JPanel(new GridBagLayout());
-        GridBagConstraints constraints = new GridBagConstraints();
-        constraints.gridx = 0;
-        constraints.gridy = 0;
-        constraints.anchor = GridBagConstraints.WEST;
-        constraints.insets = new Insets(5, 5, 5, 5);
-
-        // Abas
         JTabbedPane tabbedPane = new JTabbedPane();
 
-        // Valores de Entrada
-        JPanel panelValoresEntrada = new JPanel(new GridBagLayout());
-        GridBagConstraints valoresEntradaConstraints = new GridBagConstraints();
-        valoresEntradaConstraints.gridx = 0;
-        valoresEntradaConstraints.gridy = 0;
-        valoresEntradaConstraints.anchor = GridBagConstraints.WEST;
-        valoresEntradaConstraints.insets = new Insets(5, 5, 5, 5);
+        // Aba Valores de Entrada
+        JPanel panelValoresEntrada = new JPanel();
+        panelValoresEntrada.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.insets = new Insets(5, 5, 5, 5);
 
-        panelValoresEntrada.add(new JLabel("Número de Ingressos:"), valoresEntradaConstraints);
+        String[] lotes = {"Primeiro", "Segundo", "Terceiro", "Quarto", "Quinto"};
 
-        int numSubAbas = 5;
-        String[] subAbasNomes = {"Primeiro Lote:", "Segundo Lote:", "Terceiro Lote:", "Quarto Lote:", "Quinto Lote:"};
-        numIngressosFields = new JTextField[numSubAbas];
-
-        for (int i = 0; i < numSubAbas; i++) {
-            valoresEntradaConstraints.gridy++;
-            panelValoresEntrada.add(new JLabel(subAbasNomes[i]), valoresEntradaConstraints);
-
-            valoresEntradaConstraints.gridx++;
-            numIngressosFields[i] = new JTextField(10);
-            panelValoresEntrada.add(numIngressosFields[i], valoresEntradaConstraints);
-
-            valoresEntradaConstraints.gridx = 0;
+        for (String lote : lotes) {
+            panelValoresEntrada.add(new JLabel(lote + " Lote:"), gbc);
+            gbc.gridx++;
+            panelValoresEntrada.add(new JTextField(10), gbc);
+            gbc.gridx = 0;
+            gbc.gridy++;
         }
 
-        tabbedPane.addTab("Valores de Entrada", panelValoresEntrada);
+        tabbedPane.addTab("Valores de entrada", panelValoresEntrada);
 
-        // Valor dos Ingressos
-        JPanel panelValorIngressos = criarSubAbaValores("Valor dos Ingressos:", subAbasNomes);
-        tabbedPane.addTab("Valor dos Ingressos", panelValorIngressos);
+        // Aba Valor dos Ingressos
+        JPanel panelValorIngressos = new JPanel();
+        panelValorIngressos.setLayout(new GridBagLayout());
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.insets = new Insets(5, 5, 5, 5);
 
-        // Total
-        JPanel panelTotal = new JPanel(new GridBagLayout());
-        GridBagConstraints totalConstraints = new GridBagConstraints();
-        totalConstraints.gridx = 0;
-        totalConstraints.gridy = 0;
-        totalConstraints.anchor = GridBagConstraints.WEST;
-        totalConstraints.insets = new Insets(5, 5, 5, 5);
+        for (String lote : lotes) {
+            panelValorIngressos.add(new JLabel(lote + " Lote Valor:"), gbc);
+            gbc.gridx++;
+            panelValorIngressos.add(new JTextField(10), gbc);
+            gbc.gridx = 0;
+            gbc.gridy++;
+        }
 
-        JLabel labelTotalIngressosVendidos = new JLabel("Total de Ingressos Vendidos:");
-        panelTotal.add(labelTotalIngressosVendidos, totalConstraints);
+        tabbedPane.addTab("Valor dos ingressos", panelValorIngressos);
 
-        totalConstraints.gridx++;
-        JTextField textFieldTotalIngressosVendidos = new JTextField(10);
-        panelTotal.add(textFieldTotalIngressosVendidos, totalConstraints);
+        // Aba Total
+        JPanel panelTotal = new JPanel();
+        panelTotal.setLayout(new GridBagLayout());
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.insets = new Insets(5, 5, 5, 5);
 
-        totalConstraints.gridx = 0;
-        totalConstraints.gridy++;
-        JLabel labelTotalArrecadado = new JLabel("Total Arrecadado:");
-        panelTotal.add(labelTotalArrecadado, totalConstraints);
+        panelTotal.add(new JLabel("Total de Ingressos Vendidos:"), gbc);
+        gbc.gridx++;
+        panelTotal.add(new JTextField(10), gbc);
 
-        totalConstraints.gridx++;
-        JTextField textFieldTotalArrecadado = new JTextField(10);
-        panelTotal.add(textFieldTotalArrecadado, totalConstraints);
+        gbc.gridx = 0;
+        gbc.gridy++;
+        panelTotal.add(new JLabel("Valor Arrecadado:"), gbc);
+        gbc.gridx++;
+        panelTotal.add(new JTextField(10), gbc);
 
         tabbedPane.addTab("Total", panelTotal);
 
         // Aba Gastos
-        JPanel panelGastos = new JPanel(new GridBagLayout());
-        GridBagConstraints gastosConstraints = new GridBagConstraints();
-        gastosConstraints.gridx = 0;
-        gastosConstraints.gridy = 0;
-        gastosConstraints.anchor = GridBagConstraints.WEST;
-        gastosConstraints.insets = new Insets(5, 5, 5, 5);
+        JPanel panelGastos = new JPanel();
+        panelGastos.setLayout(new GridBagLayout());
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.insets = new Insets(10, 10, 10, 10);
 
-        // SubAbas dentro de Gastos
-        JTabbedPane tabbedPaneGastos = new JTabbedPane();
+        // Aba Decoração
+        JPanel panelDecoracao = new JPanel();
+        panelDecoracao.setLayout(new GridBagLayout());
+        GridBagConstraints gbcDecoracao = new GridBagConstraints();
+        gbcDecoracao.gridx = 0;
+        gbcDecoracao.gridy = 0;
+        gbcDecoracao.anchor = GridBagConstraints.WEST;
+        gbcDecoracao.insets = new Insets(5, 5, 5, 5);
 
-        // Decoração
-        JPanel panelDecoracao = new JPanel(new GridBagLayout());
-        GridBagConstraints decoracaoConstraints = new GridBagConstraints();
-        decoracaoConstraints.gridx = 0;
-        decoracaoConstraints.gridy = 0;
-        decoracaoConstraints.anchor = GridBagConstraints.WEST;
-        decoracaoConstraints.insets = new Insets(5, 5, 5, 5);
+        panelDecoracao.add(new JLabel("Descrição da Decoração:"), gbcDecoracao);
+        gbcDecoracao.gridx++;
+        panelDecoracao.add(new JTextField(30), gbcDecoracao);
 
-        JLabel labelDescricaoDecoracao = new JLabel("Descrição da Decoração:");
-        panelDecoracao.add(labelDescricaoDecoracao, decoracaoConstraints);
+        gbcDecoracao.gridx = 0;
+        gbcDecoracao.gridy++;
+        panelDecoracao.add(new JLabel("Valor da Decoração:"), gbcDecoracao);
+        gbcDecoracao.gridx++;
+        panelDecoracao.add(new JTextField(10), gbcDecoracao);
 
-        decoracaoConstraints.gridx++;
-        JTextField textFieldDescricaoDecoracao = new JTextField(30);
-        panelDecoracao.add(textFieldDescricaoDecoracao, decoracaoConstraints);
+        // Aba Bebidas
+        JPanel panelBebidas = new JPanel();
+        panelBebidas.setLayout(new GridBagLayout());
+        GridBagConstraints gbcBebidas = new GridBagConstraints();
+        gbcBebidas.gridx = 0;
+        gbcBebidas.gridy = 0;
+        gbcBebidas.anchor = GridBagConstraints.WEST;
+        gbcBebidas.insets = new Insets(5, 5, 5, 5);
 
-        decoracaoConstraints.gridx = 0;
-        decoracaoConstraints.gridy++;
-        JLabel labelValorDecoracao = new JLabel("Valor da Decoração:");
-        panelDecoracao.add(labelValorDecoracao, decoracaoConstraints);
+        String[] tiposBebidas = {"Água", "Destilado", "Fermentado", "Suco", "Refrigerante"};
 
-        decoracaoConstraints.gridx++;
-        JTextField textFieldValorDecoracao = new JTextField(10);
-        panelDecoracao.add(textFieldValorDecoracao, decoracaoConstraints);
-
-        tabbedPaneGastos.addTab("Decoração", panelDecoracao);
-
-        // Bebidas
-        JPanel panelBebidas = new JPanel(new GridBagLayout());
-        GridBagConstraints bebidasConstraints = new GridBagConstraints();
-        bebidasConstraints.gridx = 0;
-        bebidasConstraints.gridy = 0;
-        bebidasConstraints.anchor = GridBagConstraints.WEST;
-        bebidasConstraints.insets = new Insets(5, 5, 5, 5);
-
-        JLabel labelMediaBebida = new JLabel("Média de Bebida por Ingresso:");
-        panelBebidas.add(labelMediaBebida, bebidasConstraints);
-
-        bebidasConstraints.gridx++;
-        JTextField textFieldMediaBebida = new JTextField(10);
-        panelBebidas.add(textFieldMediaBebida, bebidasConstraints);
-
-        // Aba para detalhes das bebidas
-        JTabbedPane tabbedPaneBebidasDetalhes = new JTabbedPane();
-        String[] bebidasNomes = {"Água", "Destilado", "Fermentado", "Suco", "Refrigerante"};
-        JTextField[] bebidasFields = new JTextField[bebidasNomes.length];
-
-        for (int i = 0; i < bebidasNomes.length; i++) {
-            JPanel panelBebidaDetalhe = new JPanel(new GridBagLayout());
-            GridBagConstraints bebidaDetalheConstraints = new GridBagConstraints();
-            bebidaDetalheConstraints.gridx = 0;
-            bebidaDetalheConstraints.gridy = 0;
-            bebidaDetalheConstraints.anchor = GridBagConstraints.WEST;
-            bebidaDetalheConstraints.insets = new Insets(5, 5, 5, 5);
-
-            panelBebidaDetalhe.add(new JLabel(bebidasNomes[i] + ":"), bebidaDetalheConstraints);
-
-            bebidaDetalheConstraints.gridx++;
-            bebidasFields[i] = new JTextField(10);
-            panelBebidaDetalhe.add(bebidasFields[i], bebidaDetalheConstraints);
-
-            tabbedPaneBebidasDetalhes.addTab(bebidasNomes[i], panelBebidaDetalhe);
+        for (String tipo : tiposBebidas) {
+            panelBebidas.add(new JLabel("Descrição de " + tipo + ":"), gbcBebidas);
+            gbcBebidas.gridx++;
+            panelBebidas.add(new JTextField(30), gbcBebidas);
+            gbcBebidas.gridx = 0;
+            gbcBebidas.gridy++;
         }
 
-        bebidasConstraints.gridx = 0;
-        bebidasConstraints.gridy++;
-        bebidasConstraints.gridwidth = 2;
-        panelBebidas.add(tabbedPaneBebidasDetalhes, bebidasConstraints);
+        gbcBebidas.gridx = 0;
+        gbcBebidas.gridy++;
+        panelBebidas.add(new JLabel("Valor Total de Bebidas:"), gbcBebidas);
+        gbcBebidas.gridx++;
+        panelBebidas.add(new JTextField(10), gbcBebidas);
 
+        // Adiciona as abas dentro da aba Gastos
+        JTabbedPane tabbedPaneGastos = new JTabbedPane();
+        tabbedPaneGastos.addTab("Decoração", panelDecoracao);
         tabbedPaneGastos.addTab("Bebidas", panelBebidas);
 
-        // Segurança
-        JPanel panelSeguranca = new JPanel(new GridBagLayout());
-        GridBagConstraints segurancaConstraints = new GridBagConstraints();
-        segurancaConstraints.gridx = 0;
-        segurancaConstraints.gridy = 0;
-        segurancaConstraints.anchor = GridBagConstraints.WEST;
-        segurancaConstraints.insets = new Insets(5, 5, 5, 5);
+        panelGastos.add(tabbedPaneGastos, gbc);
 
-        JLabel labelDescricaoSeguranca = new JLabel("Descrição da Segurança:");
-        panelSeguranca.add(labelDescricaoSeguranca, segurancaConstraints);
+        // Aba Segurança
+        JPanel panelSeguranca = new JPanel();
+        panelSeguranca.setLayout(new GridBagLayout());
+        GridBagConstraints gbcSeguranca = new GridBagConstraints();
+        gbcSeguranca.gridx = 0;
+        gbcSeguranca.gridy = 0;
+        gbcSeguranca.anchor = GridBagConstraints.WEST;
+        gbcSeguranca.insets = new Insets(5, 5, 5, 5);
 
-        segurancaConstraints.gridx++;
-        JTextField textFieldDescricaoSeguranca = new JTextField(30);
-        panelSeguranca.add(textFieldDescricaoSeguranca, segurancaConstraints);
+        panelSeguranca.add(new JLabel("Descrição da Segurança:"), gbcSeguranca);
+        gbcSeguranca.gridx++;
+        panelSeguranca.add(new JTextField(30), gbcSeguranca);
 
-        segurancaConstraints.gridx = 0;
-        segurancaConstraints.gridy++;
-        JLabel labelValorSeguranca = new JLabel("Valor da Segurança:");
-        panelSeguranca.add(labelValorSeguranca, segurancaConstraints);
-
-        segurancaConstraints.gridx++;
-        JTextField textFieldValorSeguranca = new JTextField(10);
-        panelSeguranca.add(textFieldValorSeguranca, segurancaConstraints);
+        gbcSeguranca.gridx = 0;
+        gbcSeguranca.gridy++;
+        panelSeguranca.add(new JLabel("Valor da Segurança:"), gbcSeguranca);
+        gbcSeguranca.gridx++;
+        panelSeguranca.add(new JTextField(10), gbcSeguranca);
 
         tabbedPaneGastos.addTab("Segurança", panelSeguranca);
 
-        // Bombeiro
-        JPanel panelBombeiro = new JPanel(new GridBagLayout());
-        GridBagConstraints bombeiroConstraints = new GridBagConstraints();
-        bombeiroConstraints.gridx = 0;
-        bombeiroConstraints.gridy = 0;
-        bombeiroConstraints.anchor = GridBagConstraints.WEST;
-        bombeiroConstraints.insets = new Insets(5, 5, 5, 5);
+        // Aba Bombeiro
+        JPanel panelBombeiro = new JPanel();
+        panelBombeiro.setLayout(new GridBagLayout());
+        GridBagConstraints gbcBombeiro = new GridBagConstraints();
+        gbcBombeiro.gridx = 0;
+        gbcBombeiro.gridy = 0;
+        gbcBombeiro.anchor = GridBagConstraints.WEST;
+        gbcBombeiro.insets = new Insets(5, 5, 5, 5);
 
-        JLabel labelDescricaoBombeiro = new JLabel("Descrição do Bombeiro:");
-        panelBombeiro.add(labelDescricaoBombeiro, bombeiroConstraints);
+        panelBombeiro.add(new JLabel("Descrição do Bombeiro:"), gbcBombeiro);
+        gbcBombeiro.gridx++;
+        panelBombeiro.add(new JTextField(30), gbcBombeiro);
 
-        bombeiroConstraints.gridx++;
-        JTextField textFieldDescricaoBombeiro = new JTextField(30);
-        panelBombeiro.add(textFieldDescricaoBombeiro, bombeiroConstraints);
-
-        bombeiroConstraints.gridx = 0;
-        bombeiroConstraints.gridy++;
-        JLabel labelValorBombeiro = new JLabel("Valor do Bombeiro:");
-        panelBombeiro.add(labelValorBombeiro, bombeiroConstraints);
-
-        bombeiroConstraints.gridx++;
-        JTextField textFieldValorBombeiro = new JTextField(10);
-        panelBombeiro.add(textFieldValorBombeiro, bombeiroConstraints);
+        gbcBombeiro.gridx = 0;
+        gbcBombeiro.gridy++;
+        panelBombeiro.add(new JLabel("Valor do Bombeiro:"), gbcBombeiro);
+        gbcBombeiro.gridx++;
+        panelBombeiro.add(new JTextField(10), gbcBombeiro);
 
         tabbedPaneGastos.addTab("Bombeiro", panelBombeiro);
 
-        // Limpeza
-        JPanel panelLimpeza = new JPanel(new GridBagLayout());
-        GridBagConstraints limpezaConstraints = new GridBagConstraints();
-        limpezaConstraints.gridx = 0;
-        limpezaConstraints.gridy = 0;
-        limpezaConstraints.anchor = GridBagConstraints.WEST;
-        limpezaConstraints.insets = new Insets(5, 5, 5, 5);
+        // Aba Limpeza
+        JPanel panelLimpeza = new JPanel();
+        panelLimpeza.setLayout(new GridBagLayout());
+        GridBagConstraints gbcLimpeza = new GridBagConstraints();
+        gbcLimpeza.gridx = 0;
+        gbcLimpeza.gridy = 0;
+        gbcLimpeza.anchor = GridBagConstraints.WEST;
+        gbcLimpeza.insets = new Insets(5, 5, 5, 5);
 
-        JLabel labelDescricaoLimpeza = new JLabel("Descrição da Limpeza:");
-        panelLimpeza.add(labelDescricaoLimpeza, limpezaConstraints);
+        panelLimpeza.add(new JLabel("Descrição da Limpeza:"), gbcLimpeza);
+        gbcLimpeza.gridx++;
+        panelLimpeza.add(new JTextField(30), gbcLimpeza);
 
-        limpezaConstraints.gridx++;
-        JTextField textFieldDescricaoLimpeza = new JTextField(30);
-        panelLimpeza.add(textFieldDescricaoLimpeza, limpezaConstraints);
-
-        limpezaConstraints.gridx = 0;
-        limpezaConstraints.gridy++;
-        JLabel labelValorLimpeza = new JLabel("Valor da Limpeza:");
-        panelLimpeza.add(labelValorLimpeza, limpezaConstraints);
-
-        limpezaConstraints.gridx++;
-        JTextField textFieldValorLimpeza = new JTextField(10);
-        panelLimpeza.add(textFieldValorLimpeza, limpezaConstraints);
+        gbcLimpeza.gridx = 0;
+        gbcLimpeza.gridy++;
+        panelLimpeza.add(new JLabel("Valor da Limpeza:"), gbcLimpeza);
+        gbcLimpeza.gridx++;
+        panelLimpeza.add(new JTextField(10), gbcLimpeza);
 
         tabbedPaneGastos.addTab("Limpeza", panelLimpeza);
 
-        // Equipamento
-        JPanel panelEquipamento = new JPanel(new GridBagLayout());
-        GridBagConstraints equipamentoConstraints = new GridBagConstraints();
-        equipamentoConstraints.gridx = 0;
-        equipamentoConstraints.gridy = 0;
-        equipamentoConstraints.anchor = GridBagConstraints.WEST;
-        equipamentoConstraints.insets = new Insets(5, 5, 5, 5);
+        panelGastos.add(tabbedPaneGastos, gbc);
 
-        JLabel labelDescricaoEquipamento = new JLabel("Descrição do Equipamento:");
-        panelEquipamento.add(labelDescricaoEquipamento, equipamentoConstraints);
+        // Aba Som
+        JPanel panelSom = new JPanel();
+        panelSom.setLayout(new GridBagLayout());
+        GridBagConstraints gbcSom = new GridBagConstraints();
+        gbcSom.gridx = 0;
+        gbcSom.gridy = 0;
+        gbcSom.anchor = GridBagConstraints.WEST;
+        gbcSom.insets = new Insets(5, 5, 5, 5);
 
-        equipamentoConstraints.gridx++;
-        JTextField textFieldDescricaoEquipamento = new JTextField(30);
-        panelEquipamento.add(textFieldDescricaoEquipamento, equipamentoConstraints);
+        panelSom.add(new JLabel("Descrição do Som:"), gbcSom);
+        gbcSom.gridx++;
+        panelSom.add(new JTextField(30), gbcSom);
 
-        equipamentoConstraints.gridx = 0;
-        equipamentoConstraints.gridy++;
-        JLabel labelValorEquipamento = new JLabel("Valor do Equipamento:");
-        panelEquipamento.add(labelValorEquipamento, equipamentoConstraints);
+        gbcSom.gridx = 0;
+        gbcSom.gridy++;
+        panelSom.add(new JLabel("Valor do Som:"), gbcSom);
+        gbcSom.gridx++;
+        panelSom.add(new JTextField(10), gbcSom);
+        
+        tabbedPaneGastos.addTab("Som", panelSom);
+        panelGastos.add(panelSom, gbc);
 
-        equipamentoConstraints.gridx++;
-        JTextField textFieldValorEquipamento = new JTextField(10);
-        panelEquipamento.add(textFieldValorEquipamento, equipamentoConstraints);
+        // Aba Espaço
+        JPanel panelEspaco = new JPanel();
+        panelEspaco.setLayout(new GridBagLayout());
+        GridBagConstraints gbcEspaco = new GridBagConstraints();
+        gbcEspaco.gridx = 0;
+        gbcEspaco.gridy = 0;
+        gbcEspaco.anchor = GridBagConstraints.WEST;
+        gbcEspaco.insets = new Insets(5, 5, 5, 5);
 
-        tabbedPaneGastos.addTab("Equipamento", panelEquipamento);
+        panelEspaco.add(new JLabel("Localização:"), gbcEspaco);
+        gbcEspaco.gridx++;
+        panelEspaco.add(new JTextField(30), gbcEspaco);
 
-        // Adicionando o TabbedPane de Gastos ao painel principal
-        gastosConstraints.gridx = 0;
-        gastosConstraints.gridy++;
-        gastosConstraints.gridwidth = 2;
-        panelGastos.add(tabbedPaneGastos, gastosConstraints);
+        gbcEspaco.gridx = 0;
+        gbcEspaco.gridy++;
+        panelEspaco.add(new JLabel("Horário:"), gbcEspaco);
+        gbcEspaco.gridx++;
+        panelEspaco.add(new JTextField(30), gbcEspaco);
+
+        gbcEspaco.gridx = 0;
+        gbcEspaco.gridy++;
+        panelEspaco.add(new JLabel("Data:"), gbcEspaco);
+        gbcEspaco.gridx++;
+        panelEspaco.add(new JCalendar(), gbcEspaco);
+
+        gbcEspaco.gridx = 0;
+        gbcEspaco.gridy++;
+        panelEspaco.add(new JLabel("Valor do Espaço:"), gbcEspaco);
+        gbcEspaco.gridx++;
+        panelEspaco.add(new JTextField(10), gbcEspaco);
+
+        tabbedPaneGastos.addTab("Espaço", panelEspaco);
+        panelGastos.add(panelEspaco, gbc);
+
+        // Aba Equipamento
+        JPanel panelEquipamento = new JPanel();
+        panelEquipamento.setLayout(new GridBagLayout());
+        GridBagConstraints gbcEquipamento = new GridBagConstraints();
+        gbcEquipamento.gridx = 0;
+        gbcEquipamento.gridy = 0;
+        gbcEquipamento.anchor = GridBagConstraints.WEST;
+        gbcEquipamento.insets = new Insets(5, 5, 5, 5);
+
+        panelEquipamento.add(new JLabel("Descrição do Equipamento:"), gbcEquipamento);
+        gbcEquipamento.gridx++;
+        panelEquipamento.add(new JTextField(30), gbcEquipamento);
+
+        gbcEquipamento.gridx = 0;
+        gbcEquipamento.gridy++;
+        panelEquipamento.add(new JLabel("Valor do Equipamento:"), gbcEquipamento);
+        gbcEquipamento.gridx++;
+        panelEquipamento.add(new JTextField(10), gbcEquipamento);
+
+        panelGastos.add(panelEquipamento, gbc);
 
         tabbedPane.addTab("Gastos", panelGastos);
 
-        // Botões de Ação
-        JPanel panelBotoesAcao = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        buttonCalcular = new JButton("Calcular");
-        buttonCalcular.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                calcularValores();
-            }
-        });
-        panelBotoesAcao.add(buttonCalcular);
+        add(tabbedPane);
 
-        JButton buttonAumentarTela = new JButton("Aumentar Tela");
-        buttonAumentarTela.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                aumentarTela();
-            }
-        });
-        panelBotoesAcao.add(buttonAumentarTela);
-
-        JButton buttonDiminuirTela = new JButton("Diminuir Tela");
-        buttonDiminuirTela.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                diminuirTela();
-            }
-        });
-        panelBotoesAcao.add(buttonDiminuirTela);
-
-        // Painel de Observações
-        JPanel panelObservacoes = new JPanel(new BorderLayout());
-        panelObservacoes.setBorder(BorderFactory.createTitledBorder("Observações"));
-        textAreaObservacoes = new JTextArea(10, 30);
-        textAreaObservacoes.setEditable(false);
-        JScrollPane scrollPaneObservacoes = new JScrollPane(textAreaObservacoes);
-        panelObservacoes.add(scrollPaneObservacoes, BorderLayout.CENTER);
-
-        // Adicionando os painéis ao painel principal
-        constraints.gridx = 0;
-        constraints.gridy = 0;
-        panelForm.add(tabbedPane, constraints);
-
-        constraints.gridx = 0;
-        constraints.gridy = 1;
-        panelForm.add(panelBotoesAcao, constraints);
-
-        constraints.gridx = 0;
-        constraints.gridy = 2;
-        panelForm.add(panelObservacoes, constraints);
-
-        add(panelForm);
-
-        pack();
         setVisible(true);
     }
 
-    private JPanel criarSubAbaValores(String titulo, String[] subAbasNomes) {
-        JPanel panel = new JPanel(new GridBagLayout());
-        GridBagConstraints constraints = new GridBagConstraints();
-        constraints.gridx = 0;
-        constraints.gridy = 0;
-        constraints.anchor = GridBagConstraints.WEST;
-        constraints.insets = new Insets(5, 5, 5, 5);
-
-        panel.add(new JLabel(titulo), constraints);
-
-        JTextField[] fields = new JTextField[subAbasNomes.length];
-        for (int i = 0; i < subAbasNomes.length; i++) {
-            constraints.gridy++;
-            panel.add(new JLabel(subAbasNomes[i]), constraints);
-
-            constraints.gridx++;
-            fields[i] = new JTextField(10);
-            panel.add(fields[i], constraints);
-
-            constraints.gridx = 0;
-        }
-        return panel;
-    }
-
-    private void calcularValores() {
-        // Aqui você pode implementar os cálculos dos valores e exibi-los nas áreas correspondentes
-        // Utilize os campos numIngressosFields e demais campos para obter os valores de entrada
-        // e atualize os campos de total e valores dos gastos de acordo com os cálculos realizados
-    }
-
-    private void aumentarTela() {
-        Dimension size = getSize();
-        size.width += 50;
-        size.height += 50;
-        setSize(size);
-    }
-
-    private void diminuirTela() {
-        Dimension size = getSize();
-        size.width -= 50;
-        size.height -= 50;
-        setSize(size);
-    }
-
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new Program();
-            }
-        });
+        SwingUtilities.invokeLater(() -> new Program());
     }
 }
